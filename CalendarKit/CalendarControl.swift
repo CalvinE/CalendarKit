@@ -230,7 +230,7 @@ class CalendarControl: UIView {
         
         sundaySV!.axis = .vertical
         sundaySV!.distribution = .fillEqually
-        sundaySV!.alignment = .center
+        sundaySV!.alignment = .fill
         sundaySV!.spacing = 1
         sundaySV!.translatesAutoresizingMaskIntoConstraints = false
         sundaySV!.topAnchor.constraint(equalTo: weeksSV!.topAnchor).isActive = true
