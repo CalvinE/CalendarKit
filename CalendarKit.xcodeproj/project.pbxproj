@@ -14,6 +14,7 @@
 		3E8388BA215D4BB50072C773 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E8388B8215D4BB50072C773 /* LaunchScreen.storyboard */; };
 		3E8388C5215D4BB50072C773 /* CalendarKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8388C4215D4BB50072C773 /* CalendarKitTests.swift */; };
 		3E8388D0215D4BB50072C773 /* CalendarKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8388CF215D4BB50072C773 /* CalendarKitUITests.swift */; };
+		3E8388DE215D4E000072C773 /* CalendarControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8388DD215D4E000072C773 /* CalendarControl.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		3E8388CB215D4BB50072C773 /* CalendarKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalendarKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E8388CF215D4BB50072C773 /* CalendarKitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarKitUITests.swift; sourceTree = "<group>"; };
 		3E8388D1215D4BB50072C773 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3E8388DD215D4E000072C773 /* CalendarControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarControl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				3E8388B6215D4BB50072C773 /* Assets.xcassets */,
 				3E8388B8215D4BB50072C773 /* LaunchScreen.storyboard */,
 				3E8388BB215D4BB50072C773 /* Info.plist */,
+				3E8388DD215D4E000072C773 /* CalendarControl.swift */,
 			);
 			path = CalendarKit;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 			files = (
 				3E8388B2215D4BB40072C773 /* ViewController.swift in Sources */,
 				3E8388B0215D4BB40072C773 /* AppDelegate.swift in Sources */,
+				3E8388DE215D4E000072C773 /* CalendarControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
