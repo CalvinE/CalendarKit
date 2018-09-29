@@ -30,13 +30,13 @@ class UICalendar: UIControl {
     
     private var dateButtons: [UIButton] = []
     
-    private var dates: [Date] = []
+    private var dateButtonMetadata: [DateButtonMetadata] = []
     
     private let dateFormatter = DateFormatter()
     
     private var weekDayOfTheFirst: Int = 0
-    private var month: Int = 0
-    private var year: Int = 0
+    private var currentMonth: Int = 0
+    private var currentYear: Int = 0
     
     @IBInspectable
     var headerBackgroundColor: UIColor = UIColor.white {
@@ -53,44 +53,72 @@ class UICalendar: UIControl {
     }
     
     @IBInspectable
+    var headerFont: UIFont = UIFont.boldSystemFont(ofSize: 20.0) {
+        didSet{
+            monthLabel?.font = headerFont
+        }
+    }
+    
+    @IBInspectable
     var cellBackgroundColor: UIColor = UIColor.white {
         didSet {
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
     @IBInspectable
     var cellColor: UIColor = UIColor.darkGray {
         didSet {
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
     @IBInspectable
     var cellFont: UIFont = UIFont.boldSystemFont(ofSize: 20.0) {
         didSet {
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
     @IBInspectable
     var cellColorDisabled: UIColor = UIColor.lightGray {
         didSet {
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
     @IBInspectable
-    var cellBackgroundColorForDaysNotInCurrentMonth: UIColor = UIColor.darkGray {
+    var cellBackgroundColorDisabled: UIColor = UIColor.white {
         didSet {
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
+        }
+    }
+    
+    @IBInspectable
+    var cellBackgroundColorForDaysNotInCurrentMonth: UIColor = UIColor.white {
+        didSet {
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
     @IBInspectable
     var cellFontForDaysNotInCurrentMonth: UIFont = UIFont.systemFont(ofSize: 20.0) {
         didSet {
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
@@ -125,7 +153,9 @@ class UICalendar: UIControl {
     var enableSundays: Bool = true {
         didSet {
 //            changeSateEnabledStateBy(dayOfTheWeek: 1, isEnabled: enableSundays)
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
@@ -133,7 +163,9 @@ class UICalendar: UIControl {
     var enableMondays: Bool = true {
         didSet {
 //            changeSateEnabledStateBy(dayOfTheWeek: 2, isEnabled: enableMondays)
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
@@ -141,7 +173,9 @@ class UICalendar: UIControl {
     var enableTuesdays: Bool = true {
         didSet {
 //            changeSateEnabledStateBy(dayOfTheWeek: 3, isEnabled: enableTuesdays)
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
@@ -149,7 +183,9 @@ class UICalendar: UIControl {
     var enableWednesdays: Bool = true {
         didSet {
 //            changeSateEnabledStateBy(dayOfTheWeek: 4, isEnabled: enableWednesdays)
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
@@ -157,7 +193,9 @@ class UICalendar: UIControl {
     var enableThursdays: Bool = true {
         didSet {
 //            changeSateEnabledStateBy(dayOfTheWeek: 5, isEnabled: enableThursdays)
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
@@ -165,7 +203,9 @@ class UICalendar: UIControl {
     var enableFridays: Bool = true {
         didSet {
 //            changeSateEnabledStateBy(dayOfTheWeek: 6, isEnabled: enableFridays)
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
@@ -173,7 +213,18 @@ class UICalendar: UIControl {
     var enableSaturdays: Bool = true {
         didSet {
 //            changeSateEnabledStateBy(dayOfTheWeek: 7, isEnabled: enableSaturdays)
-            updateView()
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
+        }
+    }
+    
+    @IBInspectable
+    var enableDaysNotInCurrentMonth: Bool = false {
+        didSet {
+            for i in 0...dateButtons.count-1 {
+                setButtonApperance(index: i)
+            }
         }
     }
     
@@ -182,12 +233,14 @@ class UICalendar: UIControl {
     var selectedDate: Date? = nil
     
     private func updateView() {
-        dates = []
+        dateButtonMetadata = []
         calendarSV = UIStackView()
         addSubview(calendarSV!)
         
         monthLabel = UILabel()
-        monthLabel!.text = months[month-1]
+        monthLabel!.font = headerFont
+        monthLabel!.text = months[currentMonth-1]
+        
         calendarSV!.addSubview(monthLabel!)
         
         sundaySV = UIStackView()
@@ -198,8 +251,10 @@ class UICalendar: UIControl {
         fridaySV = UIStackView()
         saturdaySV = UIStackView()
         
-        weeksSV = UIStackView(arrangedSubviews: buildMonthDateStackViews(month: month, year: year))
+        weeksSV = UIStackView(arrangedSubviews: buildMonthDateStackViews(month: currentMonth, year: currentYear))
+        
         calendarSV!.addSubview(weeksSV!)
+        
         applyStyling()
     }
     
@@ -207,42 +262,46 @@ class UICalendar: UIControl {
         
         let prevMonth: Int = (month == 1) ? 12 : month - 1
         let prevMonthYear: Int = (prevMonth == 12) ? year - 1 : year
-        let prevMonthNumDays: Int = numDays[prevMonth-1]
+        let prevMonthNumDays: Int = getNumberOfDaysIn(month: prevMonth, year: prevMonthYear)
         
         let nextMonth: Int = (month == 12) ? 1 : month + 1
         let nextMonthYear: Int = (month == 1) ? year + 1 : year
-//        let nextMonthNumDays: Int = numDays[nextMonth-1]
         
         var lastWeekDayPopulated: Int = 1;
         
         for n in 1...weekDayOfTheFirst - 1 {//Populate buttons on calendar that are from the previous month.
             let date: Int = prevMonthNumDays - weekDayOfTheFirst + n + 1
-            let dayOfWeekSV: UIStackView = getDayOfTheWeekStackViewFrom(dayOfTheWeek: lastWeekDayPopulated%7)
-            dayOfWeekSV.addArrangedSubview(makeDateButton(date: date, month: prevMonth, year: prevMonthYear, isInCurrentMonth: false, dayOfTheWeek: lastWeekDayPopulated, isEnabled: false, isVisible: true))
-            lastWeekDayPopulated = incrementDayOfTheWeek(dayOfTheWeek: lastWeekDayPopulated)
+            let dayOfWeekSV: UIStackView = getDayOfTheWeekStackViewFrom(dayOfTheWeek: lastWeekDayPopulated % 7)
+            dayOfWeekSV.addArrangedSubview(makeDateButtonWith(day: date, month: prevMonth, year: prevMonthYear, isInCurrentMonth: false, dayOfTheWeek: lastWeekDayPopulated, isEnabled: true, isVisible: true))
+            lastWeekDayPopulated = increment(dayOfTheWeek: lastWeekDayPopulated)
         }
         
-        //Account for leap years
-//        if (month == 2 && ((year % 4 == 0 && year % 100 == 0) || year % 400 == 0)) {
-//
-//        }
-        
-        for n in 1...numDays[month-1] {
-            let dayOfWeekSV: UIStackView = getDayOfTheWeekStackViewFrom(dayOfTheWeek: lastWeekDayPopulated%7)
-            dayOfWeekSV.addArrangedSubview(makeDateButton(date: n, month: month, year: year, isInCurrentMonth: true, dayOfTheWeek: lastWeekDayPopulated, isEnabled: true, isVisible: true))
-            lastWeekDayPopulated = incrementDayOfTheWeek(dayOfTheWeek: lastWeekDayPopulated)
+        for n in 1...getNumberOfDaysIn(month: month, year: year) {
+            let dayOfWeekSV: UIStackView = getDayOfTheWeekStackViewFrom(dayOfTheWeek: lastWeekDayPopulated % 7)
+            dayOfWeekSV.addArrangedSubview(makeDateButtonWith(day: n, month: month, year: year, isInCurrentMonth: true, dayOfTheWeek: lastWeekDayPopulated, isEnabled: true, isVisible: true))
+            lastWeekDayPopulated = increment(dayOfTheWeek: lastWeekDayPopulated)
         }
         
         var nextDate: Int = 1
         
         for _ in lastWeekDayPopulated...7 { //Populate days visible on calendar after the current month.
-            let dayOfWeekSV: UIStackView = getDayOfTheWeekStackViewFrom(dayOfTheWeek: lastWeekDayPopulated%7)
-            dayOfWeekSV.addArrangedSubview(makeDateButton(date: nextDate, month: nextMonth, year: nextMonthYear, isInCurrentMonth: false, dayOfTheWeek: lastWeekDayPopulated, isEnabled: false, isVisible: true))
+            let dayOfWeekSV: UIStackView = getDayOfTheWeekStackViewFrom(dayOfTheWeek: lastWeekDayPopulated % 7)
+            dayOfWeekSV.addArrangedSubview(makeDateButtonWith(day: nextDate, month: nextMonth, year: nextMonthYear, isInCurrentMonth: false, dayOfTheWeek: lastWeekDayPopulated, isEnabled: true, isVisible: true))
             nextDate += 1
-            lastWeekDayPopulated = incrementDayOfTheWeek(dayOfTheWeek: lastWeekDayPopulated)
+            lastWeekDayPopulated = increment(dayOfTheWeek: lastWeekDayPopulated)
         }
         
         return [sundaySV!, mondaySV!, tuesdaySV!, wednesdaySV!, thursdaySV!, fridaySV!, saturdaySV!]
+    }
+    
+    private func getNumberOfDaysIn(month: Int, year: Int?) -> Int {
+        if (month == 2) {
+            //TODO: Account for leap years
+            //        if (month == 2 && ((year % 4 == 0 && year % 100 == 0) || year % 400 == 0)) {
+            //
+            //        }
+        }
+        return numDays[month - 1]
     }
     
     private func applyStyling() {
@@ -348,22 +407,23 @@ class UICalendar: UIControl {
         calendarSV!.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
     }
     
-    private func makeDateButton(date: Int, month: Int, year: Int, isInCurrentMonth: Bool, dayOfTheWeek: Int, isEnabled: Bool, isVisible: Bool) -> UIButton {
-        let dateBtn: UIButton = UIButton()
-        dateBtn.setTitle("\(date)", for: (isEnabled == true) ? .normal : .disabled)
-        dateBtn.backgroundColor = (isInCurrentMonth) ? self.cellBackgroundColor : self.cellBackgroundColorForDaysNotInCurrentMonth
-        dateBtn.isEnabled = self.isButtonEnabled(isEnabled: isEnabled, dayOfTheWeek: dayOfTheWeek)
-        dateBtn.setTitleColor(self.cellColor, for: .normal)
-        dateBtn.setTitleColor(self.cellColorDisabled, for: .disabled)
-        dateBtn.translatesAutoresizingMaskIntoConstraints = true
-        dateBtn.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        dateBtn.isHidden = !isVisible
-        dateBtn.layer.masksToBounds = true
+    private func setButtonApperance(index: Int) {
+        var buttonMetaData = dateButtonMetadata[index]
+        var dateBtn = dateButtons[index]
+        let isInCurrentMonth = buttonMetaData.month == currentMonth
+        dateBtn.isEnabled = self.button(isEnabled: isEnabled, dayOfTheWeek: buttonMetaData.dayOfTheWeek, isInCurrentMonth: isInCurrentMonth)
         if (dateBtn.isEnabled) {
             dateBtn.titleLabel?.font = self.cellFont
         } else {
             dateBtn.titleLabel?.font = self.cellFontForDaysNotInCurrentMonth
         }
+        if (isInCurrentMonth) {
+            dateBtn.backgroundColor = (dateBtn.isEnabled) ? self.cellBackgroundColor : self.cellBackgroundColorDisabled
+        } else {
+            dateBtn.backgroundColor = self.cellBackgroundColorForDaysNotInCurrentMonth
+        }
+        dateBtn.setTitleColor(self.cellColor, for: .normal)
+        dateBtn.setTitleColor(self.cellColorDisabled, for: .disabled)
         if (self.showCellSeperators) {
             dateBtn.layer.borderColor = self.borderColor.cgColor
             dateBtn.layer.borderWidth = 1.0
@@ -371,32 +431,59 @@ class UICalendar: UIControl {
             dateBtn.layer.borderColor = UIColor.clear.cgColor
             dateBtn.layer.borderWidth = 0.0
         }
-        dateBtn.tag = self.dates.count
-        self.dates.append(self.dateFormatter.date(from: "\(year)-\(month)-\(date)")!)
+    }
+    
+    private func makeDateButtonWith(day: Int, month: Int, year: Int, isInCurrentMonth: Bool, dayOfTheWeek: Int, isEnabled: Bool, isVisible: Bool) -> UIButton {
+        let dateBtn: UIButton = UIButton()
+        dateBtn.setTitle("\(day)", for: (isEnabled == true) ? .normal : .disabled)
+        
+        dateBtn.tag = self.dateButtonMetadata.count
+        let buttonMetaData = DateButtonMetadata(date: self.dateFormatter.date(from: "\(year)-\(month)-\(day)")!, index: dateBtn.tag, dayOfTheWeek: dayOfTheWeek, month: month, year: year, day: day)
+        self.dateButtonMetadata.append(buttonMetaData)
         self.dateButtons.append(dateBtn)
         dateBtn.addTarget(self, action: #selector(onBtnTapped), for: .touchUpInside)
+        dateBtn.translatesAutoresizingMaskIntoConstraints = true
+        dateBtn.titleLabel?.adjustsFontSizeToFitWidth = true
+        dateBtn.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        dateBtn.layer.masksToBounds = true
+        setButtonApperance(index: dateBtn.tag)
         return dateBtn
     }
     
-    private func isButtonEnabled(isEnabled: Bool, dayOfTheWeek: Int?) -> Bool
+    private func getIndexRangeForDaysInCurrentMonth() -> ClosedRange<Int> {
+        return weekDayOfTheFirst...getNumberOfDaysIn(month: currentMonth, year: currentYear) + weekDayOfTheFirst
+    }
+    
+    private func getIndexesForDaysNotInCurrentMonth() -> [Int] {
+        var indexes: [Int] = []
+        let currentMonthRange: ClosedRange<Int> = getIndexRangeForDaysInCurrentMonth()
+        for i in 0...dateButtons.count {
+            if (currentMonthRange.contains(i) == false) {
+                indexes.append(i)
+            }
+        }
+        return indexes
+    }
+    
+    private func button(isEnabled: Bool, dayOfTheWeek: Int?, isInCurrentMonth: Bool) -> Bool
     {
         switch(dayOfTheWeek){
         case 1:
-            return self.enableSundays && isEnabled
+            return self.enableSundays && isEnabled && (isInCurrentMonth || self.enableDaysNotInCurrentMonth)
         case 2:
-            return self.enableMondays && isEnabled
+            return self.enableMondays && isEnabled && (isInCurrentMonth || self.enableDaysNotInCurrentMonth)
         case 3:
-            return self.enableTuesdays && isEnabled
+            return self.enableTuesdays && isEnabled && (isInCurrentMonth || self.enableDaysNotInCurrentMonth)
         case 4:
-            return self.enableWednesdays && isEnabled
+            return self.enableWednesdays && isEnabled && (isInCurrentMonth || self.enableDaysNotInCurrentMonth)
         case 5:
-            return self.enableThursdays && isEnabled
+            return self.enableThursdays && isEnabled && (isInCurrentMonth || self.enableDaysNotInCurrentMonth)
         case 6:
-            return self.enableFridays && isEnabled
+            return self.enableFridays && isEnabled && (isInCurrentMonth || self.enableDaysNotInCurrentMonth)
         case 7:
-            return self.enableSaturdays && isEnabled
+            return self.enableSaturdays && isEnabled && (isInCurrentMonth || self.enableDaysNotInCurrentMonth)
         default:
-            return isEnabled
+            return isEnabled && (isInCurrentMonth || self.enableDaysNotInCurrentMonth)
         }
     }
 //    private func changeSateEnabledStateBy(dayOfTheWeek: Int, isEnabled: Bool) {
@@ -429,7 +516,7 @@ class UICalendar: UIControl {
         }
     }
     
-    private func incrementDayOfTheWeek(dayOfTheWeek: Int) -> Int {
+    private func increment(dayOfTheWeek: Int) -> Int {
         var nextDayOfTheWeek: Int = dayOfTheWeek + 1
         if (nextDayOfTheWeek > 7) {
             nextDayOfTheWeek = 1
@@ -439,18 +526,18 @@ class UICalendar: UIControl {
     
     @objc private func onBtnTapped(sender: UIButton) {
 //        print(dates[sender.tag])
-        selectedDate = dates[sender.tag]
+        selectedDate = dateButtonMetadata[sender.tag].date
         self.sendActions(for: .valueChanged)
     }
     
     func set(date: Date) {
-        self.date = date
         self.selectedDate = date
         dateFormatter.dateFormat = "yyyy-M-d"
         let calendar = Calendar.current
-        month = calendar.component(.month, from: date)
-        year = calendar.component(.year, from: date)
-        let dateOfTheFirst: Date = dateFormatter.date(from: "\(year)-\(month)-1")!
+        currentMonth = calendar.component(.month, from: date)
+        currentYear = calendar.component(.year, from: date)
+        let dateOfTheFirst: Date = dateFormatter.date(from: "\(currentYear)-\(currentMonth)-1")!
+        self.date = dateOfTheFirst
         weekDayOfTheFirst = Calendar.current.component(.weekday, from: dateOfTheFirst)
         updateView()
     }
@@ -467,6 +554,25 @@ class UICalendar: UIControl {
     
     override func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
+    }
+    
+    private class DateButtonMetadata {
+        var date: Date
+        var index: Int
+        var dayOfTheWeek: Int
+        var month: Int
+        var year: Int
+        var day: Int
+        
+        init(date: Date, index: Int, dayOfTheWeek: Int, month: Int, year: Int, day: Int) {
+            self.date = date
+            self.index = index
+            self.dayOfTheWeek = dayOfTheWeek
+            self.month = month
+            self.year = year
+            self.day = day
+            
+        }
     }
 
 }
