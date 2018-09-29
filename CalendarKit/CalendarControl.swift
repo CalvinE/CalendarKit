@@ -378,7 +378,7 @@ class UICalendar: UIControl {
         return dateBtn
     }
     
-    private func isButtonEnabled(isEnabled: Bool, dayOfTheWeek: Int) -> Bool
+    private func isButtonEnabled(isEnabled: Bool, dayOfTheWeek: Int?) -> Bool
     {
         switch(dayOfTheWeek){
         case 1:
