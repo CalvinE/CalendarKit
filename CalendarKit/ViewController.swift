@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func calendarValueChanged(_ sender: Any) {
-        dateLabel.text = dateFormatter.string(from: (sender as! UICalendar).date)
+        dateLabel.text = dateFormatter.string(from: (sender as! UICalendar).selectedDate ?? Date())
     }
     
 }
