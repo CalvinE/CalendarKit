@@ -10,11 +10,18 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    
+    @IBOutlet weak var dateLabel: UILabel!
+    var dateFormatter: DateFormatter = DateFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        dateFormatter.dateFormat = "d-M-yyyy"
     }
 
-
+    @IBAction func calendarValueChanged(_ sender: Any) {
+        dateLabel.text = dateFormatter.string(from: (sender as! UICalendar).date)
+    }
+    
 }
 

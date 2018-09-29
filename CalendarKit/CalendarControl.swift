@@ -9,71 +9,110 @@
 import UIKit
 
 @IBDesignable
-class CalendarControl: UIView {
+class UICalendar: UIControl {
     
     private let months: [String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     private let weekDays: [String] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday"]
     private let numDays: [Int] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     
-    var calendarSV: UIStackView? = nil
-    var monthLabel: UILabel? = nil
+    private var calendarSV: UIStackView? = nil
+    private var monthLabel: UILabel? = nil
     
-    var weeksSV: UIStackView? = nil
+    private var weeksSV: UIStackView? = nil
     
-    var sundaySV: UIStackView? = nil
-    var mondaySV: UIStackView? = nil
-    var tuesdaySV: UIStackView? = nil
-    var wednesdaySV: UIStackView? = nil
-    var thursdaySV: UIStackView? = nil
-    var fridaySV: UIStackView? = nil
-    var saturdaySV: UIStackView? = nil
+    private var sundaySV: UIStackView? = nil
+    private var mondaySV: UIStackView? = nil
+    private var tuesdaySV: UIStackView? = nil
+    private var wednesdaySV: UIStackView? = nil
+    private var thursdaySV: UIStackView? = nil
+    private var fridaySV: UIStackView? = nil
+    private var saturdaySV: UIStackView? = nil
+    
+    private var dateButtons: [UIButton] = []
+    
+    private var dates: [Date] = []
+    
+    private let dateFormatter = DateFormatter()
     
     @IBInspectable
     var headerBackgroundColor: UIColor = UIColor.white {
         didSet {
-            updateView()
+            monthLabel?.backgroundColor = headerBackgroundColor
         }
     }
     
     @IBInspectable
     var headerColor: UIColor = UIColor.black {
         didSet {
-            updateView()
+            monthLabel?.textColor = headerColor
         }
     }
     
     @IBInspectable
     var cellBackgroundColor: UIColor = UIColor.white {
         didSet {
-            updateView()
+            for btn in dateButtons {
+                if (btn.isEnabled) {
+                    btn.backgroundColor = cellBackgroundColor
+                }
+            }
         }
     }
     
     @IBInspectable
-    var cellBackgroundColorDisabled: UIColor = UIColor.white {
+    var cellBackgroundColorDisabled: UIColor = UIColor.darkGray {
         didSet {
-            updateView()
+            for btn in dateButtons {
+                if (btn.isEnabled == false) {
+                    btn.backgroundColor = cellBackgroundColorDisabled
+                }
+            }
         }
     }
     
     @IBInspectable
     var cellColor: UIColor = UIColor.darkGray {
         didSet {
-            updateView()
+            for btn in dateButtons {
+                btn.setTitleColor(cellColor, for: .normal)
+            }
         }
     }
     
     @IBInspectable
     var cellColorDisabled: UIColor = UIColor.lightGray {
         didSet {
-            updateView()
+            for btn in dateButtons {
+                btn.setTitleColor(cellColorDisabled, for: .disabled)
+            }
         }
     }
     
     @IBInspectable
-    var cellSeperatorColor: UIColor = UIColor.clear {
+    var borderColor: UIColor = UIColor.clear {
         didSet {
-            updateView()
+            self.layer.borderColor = borderColor.cgColor
+            self.layer.borderWidth = 2.0
+            calendarSV?.layer.borderColor = borderColor.cgColor
+            calendarSV?.layer.borderWidth = 1
+            monthLabel?.layer.borderColor = borderColor.cgColor
+            monthLabel?.layer.borderWidth = 1.0
+            
+        }
+    }
+    
+    @IBInspectable
+    var showCellSeperators: Bool = false {
+        didSet {
+            for btn in dateButtons {
+                if (showCellSeperators) {
+                    btn.layer.borderColor = borderColor.cgColor
+                    btn.layer.borderWidth = 1.0
+                } else {
+                    btn.layer.borderColor = UIColor.clear.cgColor
+                    btn.layer.borderWidth = 0.0
+                }
+            }
         }
     }
     
@@ -84,6 +123,7 @@ class CalendarControl: UIView {
     }
     
     func updateView() {
+        dates = []
         calendarSV = UIStackView()
         addSubview(calendarSV!)
         
@@ -93,9 +133,6 @@ class CalendarControl: UIView {
         
         monthLabel = UILabel()
         monthLabel!.text = months[month-1]
-        monthLabel!.textAlignment = .center
-        monthLabel!.textColor = headerColor
-        monthLabel!.backgroundColor = headerBackgroundColor
         calendarSV!.addSubview(monthLabel!)
         
         sundaySV = UIStackView()
@@ -108,14 +145,13 @@ class CalendarControl: UIView {
         
         weeksSV = UIStackView(arrangedSubviews: buildMonthDateStackViews(month: month, year: year))
         calendarSV!.addSubview(weeksSV!)
-        applyConstraints()
+        applyStyling()
     }
     
     func buildMonthDateStackViews(month: Int, year: Int) -> [UIStackView] {
         
-        
-        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-M-d"
+        
         let date = dateFormatter.date(from: "\(year)-\(month)-1")
         let weekDayOfTheFirst: Int = Calendar.current.component(.weekday, from: date!)
         
@@ -155,6 +191,11 @@ class CalendarControl: UIView {
             }
         }
         
+        //Account for leap years
+//        if (month == 2 && ((year % 4 == 0 && year % 100 == 0) || year % 400 == 0)) {
+//
+//        }
+        
         for n in 1...numDays[month-1] {
             var dayOfWeekSV: UIStackView? = nil
             switch (lastWeekDayPopulated%7) {
@@ -182,7 +223,7 @@ class CalendarControl: UIView {
         
         var nextDate: Int = 1
         
-        for n in lastWeekDayPopulated...7 { //Populate days visible on calendar after the current month.
+        for _ in lastWeekDayPopulated...7 { //Populate days visible on calendar after the current month.
             var dayOfWeekSV: UIStackView? = nil
             switch (lastWeekDayPopulated%7) {
             case 1: //Sunday
@@ -211,13 +252,25 @@ class CalendarControl: UIView {
         return [sundaySV!, mondaySV!, tuesdaySV!, wednesdaySV!, thursdaySV!, fridaySV!, saturdaySV!]
     }
     
-    func applyConstraints() {
+    func applyStyling() {
+        self.layer.borderColor = borderColor.cgColor
+        self.layer.borderWidth = 2.0
+        self.accessibilityIdentifier = "CalendarControl"
+        self.translatesAutoresizingMaskIntoConstraints = true
+        
+        monthLabel!.layer.borderColor = borderColor.cgColor
+        monthLabel!.layer.borderWidth = 1.0
+        monthLabel!.textAlignment = .center
+        monthLabel!.textColor = headerColor
+        monthLabel!.backgroundColor = headerBackgroundColor
+        monthLabel!.accessibilityIdentifier = "monthLabel"
         monthLabel!.translatesAutoresizingMaskIntoConstraints = false
         monthLabel!.centerXAnchor.constraint(equalTo: calendarSV!.centerXAnchor).isActive = true
         monthLabel!.topAnchor.constraint(equalTo: calendarSV!.topAnchor).isActive = true
         monthLabel!.widthAnchor.constraint(equalTo: calendarSV!.widthAnchor, multiplier: 1).isActive = true
         monthLabel!.heightAnchor.constraint(equalTo: calendarSV!.heightAnchor, multiplier: 0.125).isActive = true
         
+        weeksSV!.accessibilityIdentifier = "weeksSV"
         weeksSV!.axis = .horizontal
         weeksSV!.distribution = .fillEqually
         weeksSV!.alignment = .center
@@ -226,79 +279,73 @@ class CalendarControl: UIView {
         weeksSV!.leftAnchor.constraint(equalTo: calendarSV!.leftAnchor).isActive = true
         weeksSV!.rightAnchor.constraint(equalTo: calendarSV!.rightAnchor).isActive = true
         weeksSV!.topAnchor.constraint(equalTo: monthLabel!.bottomAnchor).isActive = true
-        weeksSV!.heightAnchor.constraint(equalTo: calendarSV!.heightAnchor, multiplier: 1-0.125).isActive = true
         
+        sundaySV!.accessibilityIdentifier = "sundaySV"
         sundaySV!.axis = .vertical
         sundaySV!.distribution = .fillEqually
         sundaySV!.alignment = .fill
-        sundaySV!.spacing = 1
+        sundaySV!.spacing = 0
         sundaySV!.translatesAutoresizingMaskIntoConstraints = false
         sundaySV!.topAnchor.constraint(equalTo: weeksSV!.topAnchor).isActive = true
-        sundaySV!.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-//        sundaySV!.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-//        sundaySV!.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1/7).isActive = true
-//        sundaySV!.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 1).isActive = true
+        sundaySV!.bottomAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
 
+        mondaySV!.accessibilityIdentifier = "mondaySV"
         mondaySV!.axis = .vertical
         mondaySV!.distribution = .fillEqually
         mondaySV!.alignment = .fill
-        mondaySV!.spacing = 1
+        mondaySV!.spacing = 0
         mondaySV!.translatesAutoresizingMaskIntoConstraints = false
-        mondaySV!.topAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
+        mondaySV!.topAnchor.constraint(equalTo: weeksSV!.topAnchor).isActive = true
         mondaySV!.bottomAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
-//        mondaySV!.leftAnchor.constraint(equalTo: sundaySV!.leftAnchor).isActive = true
-//        mondaySV!.widthAnchor.constraint(equalTo: weeksSV!.widthAnchor, multiplier: 1/7).isActive = true
 
+        tuesdaySV!.accessibilityIdentifier = "tuesdaySV"
         tuesdaySV!.axis = .vertical
         tuesdaySV!.distribution = .fillEqually
         tuesdaySV!.alignment = .fill
-        tuesdaySV!.spacing = 1
+        tuesdaySV!.spacing = 0
         tuesdaySV!.translatesAutoresizingMaskIntoConstraints = false
-        tuesdaySV!.topAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
+        tuesdaySV!.topAnchor.constraint(equalTo: weeksSV!.topAnchor).isActive = true
         tuesdaySV!.bottomAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
-//        tuesdaySV!.leftAnchor.constraint(equalTo: mondaySV.leftAnchor).isActive = true
-//        tuesdaySV!.widthAnchor.constraint(equalTo: weeksSV!.widthAnchor, multiplier: 1/7).isActive = true
 
+        wednesdaySV!.accessibilityIdentifier = "wednesdaySV"
         wednesdaySV!.axis = .vertical
         wednesdaySV!.distribution = .fillEqually
         wednesdaySV!.alignment = .fill
-        wednesdaySV!.spacing = 1
+        wednesdaySV!.spacing = 0
         wednesdaySV!.translatesAutoresizingMaskIntoConstraints = false
-        wednesdaySV!.topAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
+        wednesdaySV!.topAnchor.constraint(equalTo: weeksSV!.topAnchor).isActive = true
         wednesdaySV!.bottomAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
-//        wednesdaySV!.leftAnchor.constraint(equalTo: tuesdaySV!.leftAnchor).isActive = true
-//        wednesdaySV!.widthAnchor.constraint(equalTo: weeksSV!.widthAnchor, multiplier: 1/7).isActive = true
 
+        thursdaySV!.accessibilityIdentifier = "thursdaySV"
         thursdaySV!.axis = .vertical
         thursdaySV!.distribution = .fillEqually
         thursdaySV!.alignment = .fill
-        thursdaySV!.spacing = 1
+        thursdaySV!.spacing = 0
         thursdaySV!.translatesAutoresizingMaskIntoConstraints = false
-        thursdaySV!.topAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
+        thursdaySV!.topAnchor.constraint(equalTo: weeksSV!.topAnchor).isActive = true
         thursdaySV!.bottomAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
-//        thursdaySV!.leftAnchor.constraint(equalTo: wednesdaySV!.leftAnchor).isActive = true
-//        thursdaySV!.widthAnchor.constraint(equalTo: weeksSV!.widthAnchor, multiplier: 1/7).isActive = true
 
+        fridaySV!.accessibilityIdentifier = "fridaySV"
         fridaySV!.axis = .vertical
         fridaySV!.distribution = .fillEqually
         fridaySV!.alignment = .fill
-        fridaySV!.spacing = 1
+        fridaySV!.spacing = 0
         fridaySV!.translatesAutoresizingMaskIntoConstraints = false
-        fridaySV!.topAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
+        fridaySV!.topAnchor.constraint(equalTo: weeksSV!.topAnchor).isActive = true
         fridaySV!.bottomAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
-//        fridaySV!.leftAnchor.constraint(equalTo: thursdaySV!.leftAnchor).isActive = true
-//        fridaySV!.widthAnchor.constraint(equalTo: weeksSV!.widthAnchor, multiplier: 1/7).isActive = true
 
+        saturdaySV!.accessibilityIdentifier = "saturdaySV"
         saturdaySV!.axis = .vertical
         saturdaySV!.distribution = .fillEqually
         saturdaySV!.alignment = .fill
-        saturdaySV!.spacing = 1
+        saturdaySV!.spacing = 0
         saturdaySV!.translatesAutoresizingMaskIntoConstraints = false
-        saturdaySV!.topAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
+        saturdaySV!.topAnchor.constraint(equalTo: weeksSV!.topAnchor).isActive = true
         saturdaySV!.bottomAnchor.constraint(equalTo: weeksSV!.bottomAnchor).isActive = true
-//        saturdaySV!.leftAnchor.constraint(equalTo: fridaySV!.leftAnchor).isActive = true
-//        saturdaySV!.widthAnchor.constraint(equalTo: weeksSV!.widthAnchor, multiplier: 1/7).isActive = true
         
+        calendarSV!.layer.borderColor = borderColor.cgColor
+        calendarSV!.layer.borderWidth = 1.0
+        calendarSV!.accessibilityIdentifier = "calendarSV"
         calendarSV!.axis = .vertical
         calendarSV!.translatesAutoresizingMaskIntoConstraints = false
         calendarSV!.backgroundColor = UIColor.blue
@@ -309,37 +356,50 @@ class CalendarControl: UIView {
     }
     
     func makeDateButton(date: Int, month: Int, year: Int, isEnabled: Bool, isVisible: Bool) -> UIButton {
-        let dateBtn: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        let dateBtn: UIButton = UIButton()
         dateBtn.setTitle("\(date)", for: (isEnabled == true) ? .normal : .disabled)
         dateBtn.backgroundColor = (isEnabled) ? cellBackgroundColor : cellBackgroundColorDisabled
         dateBtn.setTitleColor(cellColor, for: .normal)
         dateBtn.setTitleColor(cellColorDisabled, for: .disabled)
-        dateBtn.translatesAutoresizingMaskIntoConstraints = false
+        dateBtn.translatesAutoresizingMaskIntoConstraints = true
+        dateBtn.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         dateBtn.isEnabled = isEnabled
         dateBtn.isHidden = !isVisible
-//        dateBtn.contentMode = .scaleAspectFill
-//        dateBtn.setValue("\(year)-\(month)-\(date)", forKey: "value")
-//        print(dateBtn.value(forKey: "value"))
+        dateBtn.layer.masksToBounds = true
+        if (showCellSeperators) {
+            dateBtn.layer.borderColor = borderColor.cgColor
+            dateBtn.layer.borderWidth = 1.0
+        } else {
+            dateBtn.layer.borderColor = UIColor.clear.cgColor
+            dateBtn.layer.borderWidth = 0.0
+        }
+        dateBtn.tag = dates.count
+        dates.append(dateFormatter.date(from: "\(year)-\(month)-\(date)")!)
+        dateButtons.append(dateBtn)
+        dateBtn.addTarget(self, action: #selector(onBtnTapped), for: .touchUpInside)
         return dateBtn
     }
     
-//    override func prepareForInterfaceBuilder() {
-//        super.prepareForInterfaceBuilder()
-//        
-//        self.headerBackgroundColor = UIColor.white
-//        
-//        self.headerColor = UIColor.black
-//        
-//        self.cellBackgroundColor = UIColor.white
-//        
-//        self.cellBackgroundColorDisabled = UIColor.white
-//        
-//        self.cellColor = UIColor.darkGray
-//        
-//        self.cellColorDisabled = UIColor.lightGray
-//        
-//        self.cellSeperatorColor = UIColor.clear
-//        
-//        self.date = Date()
-//    }
+    @objc func onBtnTapped(sender: UIButton) {
+        print(dates[sender.tag])
+        date = dates[sender.tag]
+        self.sendActions(for: .valueChanged)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        updateView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        updateView()
+    }
+    
+    override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+        
+        self.date = Date()
+    }
+
 }
