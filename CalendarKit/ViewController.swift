@@ -29,11 +29,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func prevBtnTapped(_ sender: Any) {
-        calendarControl.set(date: Calendar.current.date(byAdding: .month, value: -1, to: date)!)
+        date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
+        calendarControl.set(date: date)
     }
     
     @IBAction func nextBtnTapped(_ sender: Any) {
-        calendarControl.set(date: Calendar.current.date(byAdding: .month, value: 1, to: date)!)
+        date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
+        calendarControl.set(date: date)
     }
     
 }
