@@ -411,6 +411,13 @@ class UICalendar: UIControl {
         }
     }
     
+    func changeMonthBy(numberOfMonths: Int) {
+        if (currentCalendar != nil) {
+            let date = Calendar.current.date(byAdding: .month, value: numberOfMonths, to: self.date)!
+            set(date: date)
+        }
+    }
+    
     private func getCalendarBy(dateOfTheFirst: Date) -> MonthCalendar {
         let key = UICalendar.dateFormatter.string(from: dateOfTheFirst)
         var calendar: MonthCalendar? = buttonsMap[key]

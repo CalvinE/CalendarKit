@@ -18,9 +18,26 @@ class ViewController: UIViewController {
     var dateFormatter: DateFormatter = DateFormatter()
     var date: Date = Date()
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         dateFormatter.dateFormat = "d-M-yyyy"
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
+        swipeLeft.direction = .left
+        calendarControl.addGestureRecognizer(swipeLeft)
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
+        swipeRight.direction = .right
+        calendarControl.addGestureRecognizer(swipeRight)
+    }
+    
+    @objc private func handleSwipe(swipe: UISwipeGestureRecognizer) {
+        switch(swipe.direction) {
+            case UISwipeGestureRecognizer.Direction.left:
+                calendarControl.changeMonthBy(numberOfMonths: 1)
+            default:
+                calendarControl.changeMonthBy(numberOfMonths: -1)
+        }
     }
 
     @IBAction func calendarValueChanged(_ sender: Any) {
@@ -29,13 +46,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func prevBtnTapped(_ sender: Any) {
-        date = Calendar.current.date(byAdding: .month, value: -1, to: date)!
-        calendarControl.set(date: date)
+        calendarControl.changeMonthBy(numberOfMonths: -1)
     }
     
     @IBAction func nextBtnTapped(_ sender: Any) {
-        date = Calendar.current.date(byAdding: .month, value: 1, to: date)!
-        calendarControl.set(date: date)
+        calendarControl.changeMonthBy(numberOfMonths: 1)
     }
     
 }

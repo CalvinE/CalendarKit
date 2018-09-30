@@ -31,7 +31,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.849093"
+            timestampString = "560040970.0051529"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "373"
@@ -47,11 +47,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/ViewController.swift"
-            timestampString = "559971148.849229"
+            timestampString = "560040970.005236"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -63,7 +63,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.8497469"
+            timestampString = "560040970.005654"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "374"
@@ -79,11 +79,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/ViewController.swift"
-            timestampString = "559971148.8498549"
+            timestampString = "560040970.005707"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
             landmarkName = "calendarValueChanged(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -95,7 +95,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.850233"
+            timestampString = "560040970.0060329"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "317"
@@ -107,11 +107,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.85032"
+            timestampString = "560040970.006096"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "378"
@@ -123,32 +123,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/ViewController.swift"
-            timestampString = "559971148.850491"
+            timestampString = "560040970.006184"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "prevBtnTapped(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CalendarKit/ViewController.swift"
-            timestampString = "559971148.850852"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "nextBtnTapped(_:)"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "calendarValueChanged(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -158,28 +142,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CalendarKit/ViewController.swift"
-            timestampString = "559971148.851119"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
-            landmarkName = "calendarValueChanged(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.851378"
+            timestampString = "560040970.006584"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "424"
-            endingLineNumber = "424"
+            startingLineNumber = "431"
+            endingLineNumber = "431"
             landmarkName = "init(frame:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -187,15 +155,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.851432"
+            timestampString = "560040970.006736"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "430"
-            endingLineNumber = "430"
+            startingLineNumber = "437"
+            endingLineNumber = "437"
             landmarkName = "init(coder:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -203,15 +171,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.851481"
+            timestampString = "560040970.006829"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "591"
-            endingLineNumber = "591"
+            startingLineNumber = "598"
+            endingLineNumber = "598"
             landmarkName = "init(date:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -219,15 +187,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.851526"
+            timestampString = "560040970.006896"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "493"
-            endingLineNumber = "493"
+            startingLineNumber = "500"
+            endingLineNumber = "500"
             landmarkName = "buildMonthDateStackViews(month:year:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -235,15 +203,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.85157"
+            timestampString = "560040970.006972"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "501"
-            endingLineNumber = "501"
+            startingLineNumber = "508"
+            endingLineNumber = "508"
             landmarkName = "buildMonthDateStackViews(month:year:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -251,27 +219,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.851615"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "509"
-            endingLineNumber = "509"
-            landmarkName = "buildMonthDateStackViews(month:year:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.8516591"
+            timestampString = "560040970.007056"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "516"
@@ -283,16 +235,96 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarKit/CalendarControl.swift"
-            timestampString = "559971148.8517129"
+            timestampString = "560040970.007125"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "523"
+            endingLineNumber = "523"
+            landmarkName = "buildMonthDateStackViews(month:year:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CalendarKit/CalendarControl.swift"
+            timestampString = "560040970.007193"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "388"
             endingLineNumber = "388"
             landmarkName = "set(date:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CalendarKit/ViewController.swift"
+            timestampString = "560040970.00727"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "handleSwipe(swipe:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CalendarKit.ViewController.(handleSwipe in _26F21342F6BBBFD8043BEF5A66EAEBF6)(swipe: __C.UISwipeGestureRecognizer) -&gt; ()"
+                  moduleName = "CalendarKit"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/calvin/Code/CalendarKit.iOS/CalendarKit/CalendarKit/ViewController.swift"
+                  timestampString = "560040970.178987"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "37">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CalendarKit.ViewController.(handleSwipe in _26F21342F6BBBFD8043BEF5A66EAEBF6)(swipe: __C.UISwipeGestureRecognizer) -&gt; ()"
+                  moduleName = "CalendarKit"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/calvin/Code/CalendarKit.iOS/CalendarKit/CalendarKit/ViewController.swift"
+                  timestampString = "560040970.180895"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "65">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CalendarKit/CalendarControl.swift"
+            timestampString = "560040970.007731"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "517"
+            endingLineNumber = "517"
+            landmarkName = "buildMonthDateStackViews(month:year:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
