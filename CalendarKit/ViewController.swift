@@ -12,7 +12,11 @@ class ViewController: UIViewController {
 
     
     @IBOutlet weak var dateLabel: UILabel!
+    
+    @IBOutlet weak var calendarControl: UICalendar!
+    
     var dateFormatter: DateFormatter = DateFormatter()
+    var date: Date = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +24,16 @@ class ViewController: UIViewController {
     }
 
     @IBAction func calendarValueChanged(_ sender: Any) {
-        dateLabel.text = dateFormatter.string(from: (sender as! UICalendar).selectedDate ?? Date())
+        date = (sender as! UICalendar).selectedDate ?? Date()
+        dateLabel.text = dateFormatter.string(from: date)
+    }
+    
+    @IBAction func prevBtnTapped(_ sender: Any) {
+        calendarControl.set(date: Calendar.current.date(byAdding: .month, value: -1, to: date)!)
+    }
+    
+    @IBAction func nextBtnTapped(_ sender: Any) {
+        calendarControl.set(date: Calendar.current.date(byAdding: .month, value: 1, to: date)!)
     }
     
 }

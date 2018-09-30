@@ -17,44 +17,35 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oo0-BT-8dx">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="The Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oo0-BT-8dx">
                                 <rect key="frame" x="132" y="53" width="110" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gk3-MR-7Ad" customClass="UICalendar" customModule="CalendarKit" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uXg-Sn-HNH">
+                                <rect key="frame" x="269" y="124" width="32" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Next"/>
+                                <connections>
+                                    <action selector="nextBtnTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vue-K0-a6l"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lD7-QZ-mzH">
+                                <rect key="frame" x="63" y="124" width="31" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Prev"/>
+                                <connections>
+                                    <action selector="prevBtnTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FVX-3J-q4a"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UEz-rY-z2v" customClass="UICalendar" customModule="CalendarKit" customModuleProvider="target">
                                 <rect key="frame" x="16" y="162" width="343" height="343"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="headerBackgroundColor">
-                                        <color key="value" red="0.28235294119999998" green="0.70196078429999997" blue="0.95582217260000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="cellBackgroundColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="cellBackgroundColorForDaysNotInCurrentMonth">
-                                        <color key="value" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="enableMondays" value="NO"/>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="cellBackgroundColorDisabled">
-                                        <color key="value" red="0.22686941960000001" green="0.54352678570000001" blue="0.95582217260000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="enableDaysNotInCurrentMonth" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="cellColor">
-                                        <color key="value" red="0.28235294119999998" green="0.70196078429999997" blue="0.93333333330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="cellColorDisabled">
-                                        <color key="value" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="headerColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="calendarValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="8ee-hu-apO"/>
+                                    <action selector="calendarValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="aXx-gU-r8J"/>
                                 </connections>
                             </view>
                         </subviews>
@@ -62,6 +53,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="calendarControl" destination="UEz-rY-z2v" id="GHO-7g-C4X"/>
                         <outlet property="dateLabel" destination="oo0-BT-8dx" id="LKP-1O-9jM"/>
                     </connections>
                 </viewController>
