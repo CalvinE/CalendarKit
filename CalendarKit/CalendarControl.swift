@@ -411,9 +411,16 @@ class UICalendar: UIControl {
         }
     }
     
-    func changeMonthBy(numberOfMonths: Int) {
+    func changeDateBy(numberOfMonths: Int) {
         if (currentCalendar != nil) {
             let date = Calendar.current.date(byAdding: .month, value: numberOfMonths, to: self.date)!
+            set(date: date)
+        }
+    }
+    
+    func changeDateBy(numberOfYears: Int) {
+        if (currentCalendar != nil) {
+            let date = Calendar.current.date(byAdding: .year, value: numberOfYears, to: self.date)!
             set(date: date)
         }
     }
