@@ -49,100 +49,64 @@ class UICalendar: UIControl {
     @IBInspectable
     var cellBackgroundColor: UIColor = UIColor.white {
         didSet {
-            if (currentCalendar != nil) {
-                for i in 0...currentCalendar!.dateButtons.count-1 {
-                    setButtonApperance(index: i)
-                }
-            }
+            updateStyling()
         }
     }
     
     @IBInspectable
     var cellColor: UIColor = UIColor.darkGray {
         didSet {
-            if (currentCalendar != nil) {
-                for i in 0...currentCalendar!.dateButtons.count-1 {
-                    setButtonApperance(index: i)
-                }
-            }
+            updateStyling()
         }
     }
     
     @IBInspectable
     var cellFont: UIFont = UIFont.boldSystemFont(ofSize: 20.0) {
         didSet {
-            if (currentCalendar != nil) {
-                for i in 0...currentCalendar!.dateButtons.count-1 {
-                    setButtonApperance(index: i)
-                }
-            }
+            updateStyling()
         }
     }
     
     @IBInspectable
     var cellColorDisabled: UIColor = UIColor.lightGray {
         didSet {
-            if (currentCalendar != nil) {
-                for i in 0...currentCalendar!.dateButtons.count-1 {
-                    setButtonApperance(index: i)
-                }
-            }
+            updateStyling()
         }
     }
     
     @IBInspectable
     var cellBackgroundColorDisabled: UIColor = UIColor.white {
         didSet {
-            if (currentCalendar != nil) {
-                for i in 0...currentCalendar!.dateButtons.count-1 {
-                    setButtonApperance(index: i)
-                }
-            }
+            updateStyling()
         }
     }
     
     @IBInspectable
     var cellBackgroundColorForDaysNotInCurrentMonth: UIColor? = nil {
         didSet {
-            if (currentCalendar != nil) {
-                for i in 0...currentCalendar!.dateButtons.count-1 {
-                    setButtonApperance(index: i)
-                }
-            }
+            updateStyling()
         }
     }
     
     @IBInspectable
     var cellFontForDaysNotInCurrentMonth: UIFont = UIFont.systemFont(ofSize: 20.0) {
         didSet {
-            if (currentCalendar != nil) {
-                for i in 0...currentCalendar!.dateButtons.count-1 {
-                    setButtonApperance(index: i)
-                }
-            }
+            updateStyling()
         }
     }
     
     @IBInspectable
     var cellIsVisbleForDaysNotInCurrentMonth: Bool = false {
         didSet {
-            if (currentCalendar != nil) {
-                for i in 0...currentCalendar!.dateButtons.count-1 {
-                    setButtonApperance(index: i)
-                }
-            }
+            updateStyling()
         }
     }
     
     @IBInspectable
-    var borderColor: UIColor = UIColor.clear {
+    var borderColor: UIColor = UIColor.black {
         didSet {
-            self.layer.borderColor = borderColor.cgColor
-            self.layer.borderWidth = 2.0
-            currentCalendar?.calendarSV?.layer.borderColor = borderColor.cgColor
-            currentCalendar?.calendarSV?.layer.borderWidth = 1
-            currentCalendar?.monthLabel?.layer.borderColor = borderColor.cgColor
-            currentCalendar?.monthLabel?.layer.borderWidth = 1.0
+            
+            updateStyling()
         }
     }
     
@@ -207,6 +171,18 @@ class UICalendar: UIControl {
         didSet {
             updateStyling()
         }
+    }
+    
+    var selectionStyle: SelectionStyle = .Underline {
+        didSet {
+            updateStyling()
+        }
+    }
+    
+    enum SelectionStyle {
+        case Underline
+        case BigBorder
+        case None
     }
     
     private func applyStyling() {
@@ -317,6 +293,7 @@ class UICalendar: UIControl {
         let buttonMetaData = currentCalendar!.dateButtonMetadata[index]
         let dateBtn = currentCalendar!.dateButtons[index]
         let isInCurrentMonth = currentCalendar!.dateButtonMetadata[index].month == currentCalendar!.month
+        let isSelectedDate: Bool = Calendar.current.compare((self.currentCalendar?.dateButtonMetadata[index].date)!, to: self.selectedDate!, toGranularity: .day)  == .orderedSame
         dateBtn.isEnabled = self.button(isEnabled: isEnabled, dayOfTheWeek: buttonMetaData.dayOfTheWeek, isInCurrentMonth: isInCurrentMonth)
         if (dateBtn.isEnabled) {
             dateBtn.titleLabel?.font = self.cellFont
@@ -332,10 +309,9 @@ class UICalendar: UIControl {
         //}
         dateBtn.setTitleColor(self.cellColor, for: .normal)
         dateBtn.setTitleColor(self.cellColorDisabled, for: .disabled)
-        if (isInCurrentMonth == false && (self.cellIsVisbleForDaysNotInCurrentMonth == false && self.enableDaysNotInCurrentMonth == false)) {
-            dateBtn.alpha = 0
-        } else {
-            dateBtn.alpha = 1
+        if (isInCurrentMonth == false && self.cellIsVisbleForDaysNotInCurrentMonth == false && self.enableDaysNotInCurrentMonth == false) {
+            dateBtn.setTitleColor(UIColor.clear, for: .disabled)
+            dateBtn.backgroundColor = self.cellBackgroundColor
         }
         if (self.showCellSeperators) {
             dateBtn.layer.borderColor = self.borderColor.cgColor
@@ -344,6 +320,49 @@ class UICalendar: UIControl {
             dateBtn.layer.borderColor = UIColor.clear.cgColor
             dateBtn.layer.borderWidth = 0.0
         }
+        if (isSelectedDate) {
+            switch(self.selectionStyle) {
+                case .Underline:
+                    self.removeAnySelectionStyling(btn: dateBtn)
+                    self.setUnderlineSelectionStyling(btn: dateBtn)
+                case .BigBorder:
+                    self.removeAnySelectionStyling(btn: dateBtn)
+                    self.setBigBorderSelectionStyleing(btn: dateBtn)
+                case .None:
+                    self.removeAnySelectionStyling(btn: dateBtn)
+            }
+        } else {
+            self.removeAnySelectionStyling(btn: dateBtn)
+        }
+    }
+    
+    private func setUnderlineSelectionStyling(btn: UIButton) {
+        let normalAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
+                NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue,
+                NSAttributedString.Key.foregroundColor : btn.titleColor(for: .normal)!
+            ])
+        let disabledAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
+            NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue,
+            NSAttributedString.Key.foregroundColor : btn.titleColor(for: .disabled)!
+            ])
+        btn.setAttributedTitle(normalAttributedTitle, for: .normal)
+        btn.setAttributedTitle(disabledAttributedTitle, for: .disabled)
+    }
+    
+    private func setBigBorderSelectionStyleing(btn: UIButton) {
+        btn.layer.borderColor = self.borderColor.cgColor
+        btn.layer.borderWidth = 4.0
+    }
+    
+    private func removeAnySelectionStyling(btn: UIButton) {
+        let normalAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
+            NSAttributedString.Key.foregroundColor : btn.titleColor(for: .normal)!
+            ])
+        let disabledAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
+            NSAttributedString.Key.foregroundColor : btn.titleColor(for: .disabled)!
+            ])
+        btn.setAttributedTitle(normalAttributedTitle, for: .normal)
+        btn.setAttributedTitle(disabledAttributedTitle, for: .disabled)
     }
     
     private func button(isEnabled: Bool, dayOfTheWeek: Int?, isInCurrentMonth: Bool) -> Bool
@@ -370,12 +389,12 @@ class UICalendar: UIControl {
     }
     
     @objc private func onBtnTapped(sender: UIButton) {
-        selectedDate = currentCalendar!.dateButtonMetadata[sender.tag].date
+        self.set(selectedDate: currentCalendar!.dateButtonMetadata[sender.tag].date)
         self.sendActions(for: .valueChanged)
     }
     
     func set(date: Date) {
-        self.selectedDate = date
+//        self.selectedDate = date
         let month = Calendar.current.component(.month, from: date)
         let year = Calendar.current.component(.year, from: date)
         let dateOfTheFirst: Date = UICalendar.dateFormatter.date(from: "\(year)-\(month)-1")!
@@ -391,6 +410,11 @@ class UICalendar: UIControl {
         }
         self.date = dateOfTheFirst
         self.addSubview((currentCalendar?.calendarSV)!)
+        updateStyling()
+    }
+    
+    func set(selectedDate: Date){
+        self.selectedDate = selectedDate
         updateStyling()
     }
     
@@ -437,13 +461,15 @@ class UICalendar: UIControl {
     override init(frame: CGRect) {
         super.init(frame: frame)
         UICalendar.dateFormatter.dateFormat = "yyyy-M-d"
-        set(date: Date())
+        self.set(selectedDate: Date())
+        self.set(date: self.selectedDate!)
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         UICalendar.dateFormatter.dateFormat = "yyyy-M-d"
-        set(date: Date())
+        self.set(selectedDate: Date())
+        self.set(date: self.selectedDate!)
     }
     
     override func prepareForInterfaceBuilder() {

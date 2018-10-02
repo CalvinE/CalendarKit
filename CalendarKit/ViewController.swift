@@ -16,9 +16,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var calendarControl: UICalendar!
     
     var dateFormatter: DateFormatter = DateFormatter()
+    
     var date: Date = Date()
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,12 +34,13 @@ class ViewController: UIViewController {
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
         swipeDown.direction = .down
         calendarControl.addGestureRecognizer(swipeDown)
+        calendarControl.selectionStyle = .BigBorder
     }
     
     @objc private func handleSwipe(swipe: UISwipeGestureRecognizer) {
         switch(swipe.direction) {
             case UISwipeGestureRecognizer.Direction.left:
-                    calendarControl.changeDateBy(numberOfMonths: 1)
+                calendarControl.changeDateBy(numberOfMonths: 1)
             case UISwipeGestureRecognizer.Direction.up:
                 calendarControl.changeDateBy(numberOfYears: 1)
             case UISwipeGestureRecognizer.Direction.down:
