@@ -23,6 +23,8 @@ class UICalendar: UIControl {
     
     private var date: Date = Date()
     
+    private var disabledDates: [Date] = []
+    
     var selectedDate: Date? = nil
     
     @IBInspectable
@@ -167,6 +169,13 @@ class UICalendar: UIControl {
     }
     
     @IBInspectable
+    var disableDatesInPast: Bool = false {
+        didSet {
+            updateStyling()
+        }
+    }
+    
+    @IBInspectable
     var enableDaysNotInCurrentMonth: Bool = false {
         didSet {
             updateStyling()
@@ -293,8 +302,9 @@ class UICalendar: UIControl {
         let buttonMetaData = currentCalendar!.dateButtonMetadata[index]
         let dateBtn = currentCalendar!.dateButtons[index]
         let isInCurrentMonth = currentCalendar!.dateButtonMetadata[index].month == currentCalendar!.month
+        let btnData: DateButtonMetadata = currentCalendar!.dateButtonMetadata[index]
         let isSelectedDate: Bool = Calendar.current.compare((self.currentCalendar?.dateButtonMetadata[index].date)!, to: self.selectedDate!, toGranularity: .day)  == .orderedSame
-        dateBtn.isEnabled = self.button(isEnabled: isEnabled, dayOfTheWeek: buttonMetaData.dayOfTheWeek, isInCurrentMonth: isInCurrentMonth)
+        dateBtn.isEnabled = self.button(isEnabled: isEnabled, dayOfTheWeek: buttonMetaData.dayOfTheWeek, isInCurrentMonth: isInCurrentMonth, btnData: btnData)
         if (dateBtn.isEnabled) {
             dateBtn.titleLabel?.font = self.cellFont
         } else {
@@ -304,9 +314,7 @@ class UICalendar: UIControl {
             dateBtn.backgroundColor = (dateBtn.isEnabled) ? self.cellBackgroundColor : self.cellBackgroundColorDisabled
         } else {//if (self.enableDaysNotInCurrentMonth) {
             dateBtn.backgroundColor = (dateBtn.isEnabled) ? self.cellBackgroundColorForDaysNotInCurrentMonth ?? self.cellBackgroundColor : self.cellBackgroundColorDisabled
-        } //else {
-            //dateBtn.backgroundColor = self.cellBackgroundColorForDaysNotInCurrentMonth
-        //}
+        }
         dateBtn.setTitleColor(self.cellColor, for: .normal)
         dateBtn.setTitleColor(self.cellColorDisabled, for: .disabled)
         if (isInCurrentMonth == false && self.cellIsVisbleForDaysNotInCurrentMonth == false && self.enableDaysNotInCurrentMonth == false) {
@@ -365,27 +373,60 @@ class UICalendar: UIControl {
         btn.setAttributedTitle(disabledAttributedTitle, for: .disabled)
     }
     
-    private func button(isEnabled: Bool, dayOfTheWeek: Int?, isInCurrentMonth: Bool) -> Bool
+    public func add(disabledDate: Date) {
+        let formattedDateString: String = UICalendar.dateFormatter.string(from: disabledDate)
+        let formattedDate: Date = UICalendar.dateFormatter.date(from: formattedDateString)!
+        let existingIndex: Int? = self.disabledDates.firstIndex(of: formattedDate)
+        if (existingIndex == nil) {
+            self.disabledDates.append(formattedDate)
+            self.disabledDates.sort()
+            self.updateStyling()
+        }
+    }
+    
+    public func remove(disabledDate: Date) {
+        let formattedDateString: String = UICalendar.dateFormatter.string(from: disabledDate)
+        let formattedDate: Date = UICalendar.dateFormatter.date(from: formattedDateString)!
+        let indexToRemove: Int? = self.disabledDates.firstIndex(of: formattedDate)
+        if (indexToRemove != nil) {
+            self.disabledDates.remove(at: indexToRemove!)
+            self.updateStyling()
+        }
+    }
+    
+    private func button(isEnabled: Bool, dayOfTheWeek: Int?, isInCurrentMonth: Bool, btnData: DateButtonMetadata) -> Bool
     {
         let isInCurrentMonthEnabled = isInCurrentMonth || (self.enableDaysNotInCurrentMonth)
+        var isBtnEnabled: Bool = false
         switch(dayOfTheWeek){
         case 1:
-            return self.enableSundays && isEnabled && isInCurrentMonthEnabled
+            isBtnEnabled = self.enableSundays && isEnabled && isInCurrentMonthEnabled
         case 2:
-            return self.enableMondays && isEnabled && isInCurrentMonthEnabled
+            isBtnEnabled = self.enableMondays && isEnabled && isInCurrentMonthEnabled
         case 3:
-            return self.enableTuesdays && isEnabled && isInCurrentMonthEnabled
+            isBtnEnabled = self.enableTuesdays && isEnabled && isInCurrentMonthEnabled
         case 4:
-            return self.enableWednesdays && isEnabled && isInCurrentMonthEnabled
+            isBtnEnabled = self.enableWednesdays && isEnabled && isInCurrentMonthEnabled
         case 5:
-            return self.enableThursdays && isEnabled && isInCurrentMonthEnabled
+            isBtnEnabled = self.enableThursdays && isEnabled && isInCurrentMonthEnabled
         case 6:
-            return self.enableFridays && isEnabled && isInCurrentMonthEnabled
+            isBtnEnabled = self.enableFridays && isEnabled && isInCurrentMonthEnabled
         case 7:
-            return self.enableSaturdays && isEnabled && isInCurrentMonthEnabled
+            isBtnEnabled = self.enableSaturdays && isEnabled && isInCurrentMonthEnabled
         default:
-            return isEnabled && isInCurrentMonthEnabled
+            isBtnEnabled = isEnabled && isInCurrentMonthEnabled
         }
+        if (isBtnEnabled == true) {
+            if (self.disableDatesInPast == true) {
+                let today: Date = Date()
+                let isPast: Bool = Calendar.current.compare(today, to: btnData.date, toGranularity: .day) != .orderedDescending
+                isBtnEnabled = isPast
+            }
+            if (isBtnEnabled == true) {
+                isBtnEnabled = !self.disabledDates.contains(btnData.date)
+            }
+        }
+        return isBtnEnabled
     }
     
     @objc private func onBtnTapped(sender: UIButton) {
@@ -394,7 +435,6 @@ class UICalendar: UIControl {
     }
     
     func set(date: Date) {
-//        self.selectedDate = date
         let month = Calendar.current.component(.month, from: date)
         let year = Calendar.current.component(.year, from: date)
         let dateOfTheFirst: Date = UICalendar.dateFormatter.date(from: "\(year)-\(month)-1")!

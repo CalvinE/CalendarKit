@@ -45,7 +45,7 @@ class ViewController: UIViewController {
                 calendarControl.changeDateBy(numberOfYears: 1)
             case UISwipeGestureRecognizer.Direction.down:
                 calendarControl.changeDateBy(numberOfYears: -1)
-                default:
+            default:
                 calendarControl.changeDateBy(numberOfMonths: -1)
         }
     }

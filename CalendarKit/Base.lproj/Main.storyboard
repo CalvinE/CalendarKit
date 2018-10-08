@@ -40,20 +40,21 @@
                                     <action selector="prevBtnTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FVX-3J-q4a"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Gk-0N-Jfe" customClass="UICalendar" customModule="CalendarKit" customModuleProvider="target">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UXV-KQ-40d" customClass="UICalendar" customModule="CalendarKit" customModuleProvider="target">
                                 <rect key="frame" x="16" y="162" width="343" height="343"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="showCellSeperators" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="cellIsVisbleForDaysNotInCurrentMonth" value="YES"/>
                                     <userDefinedRuntimeAttribute type="color" keyPath="cellColor">
-                                        <color key="value" red="0.28235294119999998" green="0.70196078429999997" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="value" red="0.18499644417858274" green="0.32821346906675153" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="enableDaysNotInCurrentMonth" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="cellColorDisabled">
+                                        <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="disableDatesInPast" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="calendarValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="GUp-G8-XB3"/>
+                                    <action selector="calendarValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="SyO-kR-vur"/>
                                 </connections>
                             </view>
                         </subviews>
@@ -61,7 +62,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="calendarControl" destination="9Gk-0N-Jfe" id="sgk-jj-zpA"/>
+                        <outlet property="calendarControl" destination="UXV-KQ-40d" id="TJi-a5-8vA"/>
                         <outlet property="dateLabel" destination="oo0-BT-8dx" id="LKP-1O-9jM"/>
                     </connections>
                 </viewController>
