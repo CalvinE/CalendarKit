@@ -182,6 +182,20 @@ class UICalendar: UIControl {
         }
     }
     
+    @IBInspectable
+    var selectionColor: UIColor? = nil {
+        didSet {
+            updateStyling()
+        }
+    }
+    
+    @IBInspectable
+    var selectionTextColor: UIColor? = nil {
+        didSet {
+            updateStyling()
+        }
+    }
+    
     var selectionStyle: SelectionStyle = .Underline {
         didSet {
             updateStyling()
@@ -191,6 +205,7 @@ class UICalendar: UIControl {
     enum SelectionStyle {
         case Underline
         case BigBorder
+        case Circle
         case None
     }
     
@@ -299,12 +314,11 @@ class UICalendar: UIControl {
     }
     
     private func setButtonApperance(index: Int) {
-        let buttonMetaData = currentCalendar!.dateButtonMetadata[index]
-        let dateBtn = currentCalendar!.dateButtons[index]
-        let isInCurrentMonth = currentCalendar!.dateButtonMetadata[index].month == currentCalendar!.month
-        let btnData: DateButtonMetadata = currentCalendar!.dateButtonMetadata[index]
+        let buttonMetaData: DateButtonMetadata = currentCalendar!.dateButtonMetadata[index]
+        let dateBtn: UIButton = currentCalendar!.dateButtons[index]
+        let isInCurrentMonth: Bool = currentCalendar!.dateButtonMetadata[index].month == currentCalendar!.month
         let isSelectedDate: Bool = Calendar.current.compare((self.currentCalendar?.dateButtonMetadata[index].date)!, to: self.selectedDate!, toGranularity: .day)  == .orderedSame
-        dateBtn.isEnabled = self.button(isEnabled: isEnabled, dayOfTheWeek: buttonMetaData.dayOfTheWeek, isInCurrentMonth: isInCurrentMonth, btnData: btnData)
+        dateBtn.isEnabled = self.button(isEnabled: isEnabled, dayOfTheWeek: buttonMetaData.dayOfTheWeek, isInCurrentMonth: isInCurrentMonth, btnData: buttonMetaData)
         if (dateBtn.isEnabled) {
             dateBtn.titleLabel?.font = self.cellFont
         } else {
@@ -336,6 +350,9 @@ class UICalendar: UIControl {
                 case .BigBorder:
                     self.removeAnySelectionStyling(btn: dateBtn)
                     self.setBigBorderSelectionStyleing(btn: dateBtn)
+                case .Circle:
+                    self.removeAnySelectionStyling(btn: dateBtn)
+                    self.setCircleSelectionStyling(btn: dateBtn)
                 case .None:
                     self.removeAnySelectionStyling(btn: dateBtn)
             }
@@ -347,19 +364,33 @@ class UICalendar: UIControl {
     private func setUnderlineSelectionStyling(btn: UIButton) {
         let normalAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
                 NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue,
-                NSAttributedString.Key.foregroundColor : btn.titleColor(for: .normal)!
+                NSAttributedString.Key.foregroundColor : self.selectionTextColor ?? btn.titleColor(for: .normal)!
             ])
         let disabledAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
             NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue,
-            NSAttributedString.Key.foregroundColor : btn.titleColor(for: .disabled)!
+            NSAttributedString.Key.foregroundColor : self.selectionTextColor ?? btn.titleColor(for: .disabled)!
             ])
         btn.setAttributedTitle(normalAttributedTitle, for: .normal)
         btn.setAttributedTitle(disabledAttributedTitle, for: .disabled)
     }
     
     private func setBigBorderSelectionStyleing(btn: UIButton) {
-        btn.layer.borderColor = self.borderColor.cgColor
+        btn.layer.borderColor = self.selectionColor?.cgColor ?? self.borderColor.cgColor
         btn.layer.borderWidth = 4.0
+    }
+    
+    private func setCircleSelectionStyling(btn: UIButton) {
+        let normalAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
+            NSAttributedString.Key.foregroundColor : self.selectionTextColor ?? btn.titleColor(for: .normal)!
+            ])
+        let disabledAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
+            NSAttributedString.Key.foregroundColor : self.selectionTextColor ?? btn.titleColor(for: .disabled)!
+            ])
+        btn.setAttributedTitle(normalAttributedTitle, for: .normal)
+        btn.setAttributedTitle(disabledAttributedTitle, for: .disabled)
+        btn.titleLabel!.layer.cornerRadius = btn.titleLabel!.frame.width / 2
+        btn.titleLabel!.clipsToBounds = true
+        btn.titleLabel!.backgroundColor = self.selectionColor ?? ((btn.isEnabled) ? self.cellBackgroundColor : self.cellBackgroundColorDisabled)
     }
     
     private func removeAnySelectionStyling(btn: UIButton) {
@@ -371,6 +402,9 @@ class UICalendar: UIControl {
             ])
         btn.setAttributedTitle(normalAttributedTitle, for: .normal)
         btn.setAttributedTitle(disabledAttributedTitle, for: .disabled)
+        btn.titleLabel!.layer.cornerRadius = 0
+        btn.titleLabel!.clipsToBounds = true
+        btn.titleLabel!.backgroundColor = (btn.isEnabled) ? self.cellBackgroundColor : self.cellBackgroundColorDisabled
     }
     
     public func add(disabledDate: Date) {

@@ -34,7 +34,10 @@ class ViewController: UIViewController {
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
         swipeDown.direction = .down
         calendarControl.addGestureRecognizer(swipeDown)
-        calendarControl.selectionStyle = .BigBorder
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {        
+        calendarControl.selectionStyle = .Circle
     }
     
     @objc private func handleSwipe(swipe: UISwipeGestureRecognizer) {
