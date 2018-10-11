@@ -196,7 +196,7 @@ class UICalendar: UIControl {
         }
     }
     
-    var selectionStyle: SelectionStyle = .Underline {
+    var selectionStyle: SelectionStyle = .Circle {
         didSet {
             updateStyling()
         }
@@ -206,6 +206,7 @@ class UICalendar: UIControl {
         case Underline
         case BigBorder
         case Circle
+        case Background
         case None
     }
     
@@ -342,7 +343,7 @@ class UICalendar: UIControl {
             dateBtn.layer.borderColor = UIColor.clear.cgColor
             dateBtn.layer.borderWidth = 0.0
         }
-        if (isSelectedDate) {
+        if (isSelectedDate && dateBtn.isEnabled) {
             switch(self.selectionStyle) {
                 case .Underline:
                     self.removeAnySelectionStyling(btn: dateBtn)
@@ -353,6 +354,9 @@ class UICalendar: UIControl {
                 case .Circle:
                     self.removeAnySelectionStyling(btn: dateBtn)
                     self.setCircleSelectionStyling(btn: dateBtn)
+                case .Background:
+                    self.removeAnySelectionStyling(btn: dateBtn)
+                    self.setBackgroundSelectionStyling(btn: dateBtn)
                 case .None:
                     self.removeAnySelectionStyling(btn: dateBtn)
             }
@@ -390,6 +394,20 @@ class UICalendar: UIControl {
         btn.setAttributedTitle(disabledAttributedTitle, for: .disabled)
         btn.titleLabel!.layer.cornerRadius = btn.titleLabel!.frame.width / 2
         btn.titleLabel!.clipsToBounds = true
+        btn.titleLabel!.backgroundColor = self.selectionColor ?? ((btn.isEnabled) ? self.cellBackgroundColor : self.cellBackgroundColorDisabled)
+    }
+    
+    private func setBackgroundSelectionStyling(btn: UIButton) {
+        let normalAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
+            NSAttributedString.Key.foregroundColor : self.selectionTextColor ?? btn.titleColor(for: .normal)!
+            ])
+        let disabledAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
+            NSAttributedString.Key.foregroundColor : self.selectionTextColor ?? btn.titleColor(for: .disabled)!
+            ])
+        btn.setAttributedTitle(normalAttributedTitle, for: .normal)
+        btn.setAttributedTitle(disabledAttributedTitle, for: .disabled)
+        btn.titleLabel!.clipsToBounds = true
+        btn.backgroundColor = self.selectionColor ?? ((btn.isEnabled) ? self.cellBackgroundColor : self.cellBackgroundColorDisabled)
         btn.titleLabel!.backgroundColor = self.selectionColor ?? ((btn.isEnabled) ? self.cellBackgroundColor : self.cellBackgroundColorDisabled)
     }
     
@@ -468,6 +486,10 @@ class UICalendar: UIControl {
         self.sendActions(for: .valueChanged)
     }
     
+    override func didAddSubview(_ subview: UIView) {
+        updateStyling()
+    }
+    
     func set(date: Date) {
         let month = Calendar.current.component(.month, from: date)
         let year = Calendar.current.component(.year, from: date)
@@ -484,7 +506,7 @@ class UICalendar: UIControl {
         }
         self.date = dateOfTheFirst
         self.addSubview((currentCalendar?.calendarSV)!)
-        updateStyling()
+        self.didAddSubview((currentCalendar?.calendarSV)!)
     }
     
     func set(selectedDate: Date){
@@ -671,10 +693,12 @@ class UICalendar: UIControl {
             let buttonMetaData = DateButtonMetadata(date: UICalendar.dateFormatter.date(from: "\(year)-\(month)-\(day)")!, index: dateBtn.tag, dayOfTheWeek: dayOfTheWeek, month: month, year: year, day: day)
             dateButtonMetadata.append(buttonMetaData)
             dateButtons.append(dateBtn)
-            dateBtn.translatesAutoresizingMaskIntoConstraints = true
-            dateBtn.titleLabel?.adjustsFontSizeToFitWidth = true
-            dateBtn.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+//            dateBtn.translatesAutoresizingMaskIntoConstraints = true
+            dateBtn.titleLabel?.adjustsFontSizeToFitWidth = false
+//            dateBtn.autoresizingMask = [.flexibleHeight, .flexibleWidth]
             dateBtn.layer.masksToBounds = true
+            dateBtn.titleLabel?.addConstraint(NSLayoutConstraint(item: dateBtn.titleLabel!, attribute: .height, relatedBy: .equal, toItem: dateBtn.titleLabel!, attribute: .width, multiplier: 1, constant: 0))
+            dateBtn.titleLabel?.textAlignment = .center
             return dateBtn
         }
         

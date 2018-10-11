@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {        
-        calendarControl.selectionStyle = .Circle
+//        calendarControl.selectionStyle = .Underline
     }
     
     @objc private func handleSwipe(swipe: UISwipeGestureRecognizer) {
