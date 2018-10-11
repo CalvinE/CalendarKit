@@ -529,6 +529,8 @@ class UICalendar: UIControl {
                 setButtonApperance(index: i)
             }
         }
+        self.layoutIfNeeded()
+        self.layoutSubviews()
     }
     
     func changeDateBy(numberOfMonths: Int) {
