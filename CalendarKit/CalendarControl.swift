@@ -247,7 +247,7 @@ class UICalendar: UIControl {
         currentCalendar!.sundaySV!.translatesAutoresizingMaskIntoConstraints = false
         currentCalendar!.sundaySV!.topAnchor.constraint(equalTo: currentCalendar!.weeksSV!.topAnchor).isActive = true
         currentCalendar!.sundaySV!.bottomAnchor.constraint(equalTo: currentCalendar!.weeksSV!.bottomAnchor).isActive = true
-
+        
         currentCalendar!.mondaySV!.accessibilityIdentifier = "mondaySV"
         currentCalendar!.mondaySV!.axis = .vertical
         currentCalendar!.mondaySV!.distribution = .fillEqually
@@ -256,7 +256,7 @@ class UICalendar: UIControl {
         currentCalendar!.mondaySV!.translatesAutoresizingMaskIntoConstraints = false
         currentCalendar!.mondaySV!.topAnchor.constraint(equalTo: currentCalendar!.weeksSV!.topAnchor).isActive = true
         currentCalendar!.mondaySV!.bottomAnchor.constraint(equalTo: currentCalendar!.weeksSV!.bottomAnchor).isActive = true
-
+        
         currentCalendar!.tuesdaySV!.accessibilityIdentifier = "tuesdaySV"
         currentCalendar!.tuesdaySV!.axis = .vertical
         currentCalendar!.tuesdaySV!.distribution = .fillEqually
@@ -265,7 +265,7 @@ class UICalendar: UIControl {
         currentCalendar!.tuesdaySV!.translatesAutoresizingMaskIntoConstraints = false
         currentCalendar!.tuesdaySV!.topAnchor.constraint(equalTo: currentCalendar!.weeksSV!.topAnchor).isActive = true
         currentCalendar!.tuesdaySV!.bottomAnchor.constraint(equalTo: currentCalendar!.weeksSV!.bottomAnchor).isActive = true
-
+        
         currentCalendar!.wednesdaySV!.accessibilityIdentifier = "wednesdaySV"
         currentCalendar!.wednesdaySV!.axis = .vertical
         currentCalendar!.wednesdaySV!.distribution = .fillEqually
@@ -274,7 +274,7 @@ class UICalendar: UIControl {
         currentCalendar!.wednesdaySV!.translatesAutoresizingMaskIntoConstraints = false
         currentCalendar!.wednesdaySV!.topAnchor.constraint(equalTo: currentCalendar!.weeksSV!.topAnchor).isActive = true
         currentCalendar!.wednesdaySV!.bottomAnchor.constraint(equalTo: currentCalendar!.weeksSV!.bottomAnchor).isActive = true
-
+        
         currentCalendar!.thursdaySV!.accessibilityIdentifier = "thursdaySV"
         currentCalendar!.thursdaySV!.axis = .vertical
         currentCalendar!.thursdaySV!.distribution = .fillEqually
@@ -283,7 +283,7 @@ class UICalendar: UIControl {
         currentCalendar!.thursdaySV!.translatesAutoresizingMaskIntoConstraints = false
         currentCalendar!.thursdaySV!.topAnchor.constraint(equalTo: currentCalendar!.weeksSV!.topAnchor).isActive = true
         currentCalendar!.thursdaySV!.bottomAnchor.constraint(equalTo: currentCalendar!.weeksSV!.bottomAnchor).isActive = true
-
+        
         currentCalendar!.fridaySV!.accessibilityIdentifier = "fridaySV"
         currentCalendar!.fridaySV!.axis = .vertical
         currentCalendar!.fridaySV!.distribution = .fillEqually
@@ -292,7 +292,7 @@ class UICalendar: UIControl {
         currentCalendar!.fridaySV!.translatesAutoresizingMaskIntoConstraints = false
         currentCalendar!.fridaySV!.topAnchor.constraint(equalTo: currentCalendar!.weeksSV!.topAnchor).isActive = true
         currentCalendar!.fridaySV!.bottomAnchor.constraint(equalTo: currentCalendar!.weeksSV!.bottomAnchor).isActive = true
-
+        
         currentCalendar!.saturdaySV!.accessibilityIdentifier = "saturdaySV"
         currentCalendar!.saturdaySV!.axis = .vertical
         currentCalendar!.saturdaySV!.distribution = .fillEqually
@@ -318,7 +318,10 @@ class UICalendar: UIControl {
         let buttonMetaData: DateButtonMetadata = currentCalendar!.dateButtonMetadata[index]
         let dateBtn: UIButton = currentCalendar!.dateButtons[index]
         let isInCurrentMonth: Bool = currentCalendar!.dateButtonMetadata[index].month == currentCalendar!.month
-        let isSelectedDate: Bool = Calendar.current.compare((self.currentCalendar?.dateButtonMetadata[index].date)!, to: self.selectedDate!, toGranularity: .day)  == .orderedSame
+        var isSelectedDate: Bool = false
+        if (self.selectedDate != nil) {
+            isSelectedDate = Calendar.current.compare((self.currentCalendar?.dateButtonMetadata[index].date)!, to: self.selectedDate!, toGranularity: .day)  == .orderedSame
+        }
         dateBtn.isEnabled = self.button(isEnabled: isEnabled, dayOfTheWeek: buttonMetaData.dayOfTheWeek, isInCurrentMonth: isInCurrentMonth, btnData: buttonMetaData)
         if (dateBtn.isEnabled) {
             dateBtn.titleLabel?.font = self.cellFont
@@ -345,20 +348,20 @@ class UICalendar: UIControl {
         }
         if (isSelectedDate && dateBtn.isEnabled) {
             switch(self.selectionStyle) {
-                case .Underline:
-                    self.removeAnySelectionStyling(btn: dateBtn)
-                    self.setUnderlineSelectionStyling(btn: dateBtn)
-                case .BigBorder:
-                    self.removeAnySelectionStyling(btn: dateBtn)
-                    self.setBigBorderSelectionStyleing(btn: dateBtn)
-                case .Circle:
-                    self.removeAnySelectionStyling(btn: dateBtn)
-                    self.setCircleSelectionStyling(btn: dateBtn)
-                case .Background:
-                    self.removeAnySelectionStyling(btn: dateBtn)
-                    self.setBackgroundSelectionStyling(btn: dateBtn)
-                case .None:
-                    self.removeAnySelectionStyling(btn: dateBtn)
+            case .Underline:
+                self.removeAnySelectionStyling(btn: dateBtn)
+                self.setUnderlineSelectionStyling(btn: dateBtn)
+            case .BigBorder:
+                self.removeAnySelectionStyling(btn: dateBtn)
+                self.setBigBorderSelectionStyleing(btn: dateBtn)
+            case .Circle:
+                self.removeAnySelectionStyling(btn: dateBtn)
+                self.setCircleSelectionStyling(btn: dateBtn)
+            case .Background:
+                self.removeAnySelectionStyling(btn: dateBtn)
+                self.setBackgroundSelectionStyling(btn: dateBtn)
+            case .None:
+                self.removeAnySelectionStyling(btn: dateBtn)
             }
         } else {
             self.removeAnySelectionStyling(btn: dateBtn)
@@ -367,8 +370,8 @@ class UICalendar: UIControl {
     
     private func setUnderlineSelectionStyling(btn: UIButton) {
         let normalAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
-                NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue,
-                NSAttributedString.Key.foregroundColor : self.selectionTextColor ?? btn.titleColor(for: .normal)!
+            NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue,
+            NSAttributedString.Key.foregroundColor : self.selectionTextColor ?? btn.titleColor(for: .normal)!
             ])
         let disabledAttributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: btn.titleLabel!.text!, attributes: [
             NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue,
@@ -559,15 +562,13 @@ class UICalendar: UIControl {
     override init(frame: CGRect) {
         super.init(frame: frame)
         UICalendar.dateFormatter.dateFormat = "yyyy-M-d"
-        self.set(selectedDate: Date())
-        self.set(date: self.selectedDate!)
+        self.set(date: Date())
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         UICalendar.dateFormatter.dateFormat = "yyyy-M-d"
-        self.set(selectedDate: Date())
-        self.set(date: self.selectedDate!)
+        self.set(date: Date())
     }
     
     override func prepareForInterfaceBuilder() {
@@ -695,9 +696,9 @@ class UICalendar: UIControl {
             let buttonMetaData = DateButtonMetadata(date: UICalendar.dateFormatter.date(from: "\(year)-\(month)-\(day)")!, index: dateBtn.tag, dayOfTheWeek: dayOfTheWeek, month: month, year: year, day: day)
             dateButtonMetadata.append(buttonMetaData)
             dateButtons.append(dateBtn)
-//            dateBtn.translatesAutoresizingMaskIntoConstraints = true
+            //            dateBtn.translatesAutoresizingMaskIntoConstraints = true
             dateBtn.titleLabel?.adjustsFontSizeToFitWidth = false
-//            dateBtn.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+            //            dateBtn.autoresizingMask = [.flexibleHeight, .flexibleWidth]
             dateBtn.layer.masksToBounds = true
             dateBtn.titleLabel?.addConstraint(NSLayoutConstraint(item: dateBtn.titleLabel!, attribute: .height, relatedBy: .equal, toItem: dateBtn.titleLabel!, attribute: .width, multiplier: 1, constant: 0))
             dateBtn.titleLabel?.textAlignment = .center
@@ -753,5 +754,5 @@ class UICalendar: UIControl {
             
         }
     }
-
+    
 }
